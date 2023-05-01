@@ -1,7 +1,9 @@
 <template>
   <div class="flex h-full overflow-auto">
     <el-menu class="h-full overflow-auto w-72" @select="handleSelectGeometry">
-      <el-menu-item v-for="geometry in sections" :index="geometry">{{ geometry }}</el-menu-item>
+      <el-menu-item v-for="geometry in sections" :index="geometry">{{
+        geometry
+      }}</el-menu-item>
     </el-menu>
     <div class="flex-1 overflow-auto">
       <DemoGeometry ref="demoGeometry" :geometry="seletedGeometry" />
@@ -11,22 +13,37 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import DemoGeometry from "@/components/geometries/index.vue"
-const seletedGeometry = ref('BoxGeometry')
-const demoGeometry = ref()
+import DemoGeometry from "./geometries/index.vue";
+const seletedGeometry = ref("BoxGeometry");
+const demoGeometry = ref();
 const sections = [
-  "BoxGeometry", "CapsuleGeometry", "CircleGeometry", "ConeGeometry", "CylinderGeometry",
-  "DodecahedronGeometry", "EdgesGeometry", "ExtrudeGeometry", "IcosahedronGeometry", "LatheGeometry",
-  "OctahedronGeometry", "PlaneGeometry", "PolyhedronGeometry", "RingGeometry", "ShapeGeometry", "SphereGeometry", "TetrahedronGeometry",
-  "TorusGeometry", "TorusKnotGeometry", "TubeGeometry", "WireframeGeometry"
+  "BoxGeometry",
+  "CapsuleGeometry",
+  "CircleGeometry",
+  "ConeGeometry",
+  "CylinderGeometry",
+  "DodecahedronGeometry",
+  "EdgesGeometry",
+  "ExtrudeGeometry",
+  "IcosahedronGeometry",
+  "LatheGeometry",
+  "OctahedronGeometry",
+  "PlaneGeometry",
+  "PolyhedronGeometry",
+  "RingGeometry",
+  "ShapeGeometry",
+  "SphereGeometry",
+  "TetrahedronGeometry",
+  "TorusGeometry",
+  "TorusKnotGeometry",
+  "TubeGeometry",
+  "WireframeGeometry",
 ];
 const handleSelectGeometry = (geometry) => {
-  seletedGeometry.value = geometry
-  demoGeometry.value.setGeometry(geometry)
-}
-onMounted(() => {
-
-})
+  seletedGeometry.value = geometry;
+  demoGeometry.value.setGeometry(geometry);
+};
+onMounted(() => {});
 </script>
 
 <style lang="scss" scoped></style>
