@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-full overflow-auto">
     <el-menu class="h-full overflow-auto w-72" @select="handleSelectGeometry">
-      <el-menu-item v-for="geometry in sections" :index="geometry">{{
+      <el-menu-item :key="geometry" v-for="geometry in sections" :index="geometry">{{
         geometry
       }}</el-menu-item>
     </el-menu>
@@ -43,7 +43,7 @@ const handleSelectGeometry = (geometry) => {
   seletedGeometry.value = geometry;
   demoGeometry.value.setGeometry(geometry);
 };
-onMounted(() => {});
+onMounted(() => { });
 </script>
 
 <style lang="scss" scoped></style>

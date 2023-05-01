@@ -13,6 +13,7 @@
     "autoprefixer": "^10.4.14",
     "dat.gui": "^0.7.9",
     "element-plus": "^2.3.3",
+    "eslint": "^8.39.0",
     "gsap": "^3.11.5",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.34",
@@ -26,8 +27,13 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
-    "sass": "^1.56.2",
-    "sass-loader": "7.3.1",
+    "eslint-plugin-vue": "^9.11.0",
+    "sass": "^1.62.1",
+    "sass-loader": "^13.2.2",
     "vite": "^4.2.0"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/yuweiran/three-document.git",
+  "author": "yuweiran <1492681276@qq.com>",
+  "license": "MIT"
 }
