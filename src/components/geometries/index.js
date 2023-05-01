@@ -41,20 +41,8 @@ import {
 
 import { GUI } from "dat.gui";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
-
-let gui = null
-const scene = new Scene();
-scene.background = new Color(0x444444);
+const gui = new GUI();
 const twoPi = Math.PI * 2;
-const group = new Group();
-const geometry = new BufferGeometry();
-geometry.setAttribute('position', new Float32BufferAttribute([], 3));
-const lineMaterial = new LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
-const meshMaterial = new MeshPhongMaterial({ color: 0x156289, emissive: 0x072534, side: DoubleSide, flatShading: true });
-group.add(new LineSegments(geometry, lineMaterial));
-group.add(new Mesh(geometry, meshMaterial));
-
 class CustomSinCurve extends Curve {
 
   constructor(scale = 1) {
@@ -98,9 +86,6 @@ function updateGroupGeometry(mesh, geometry) {
 
   mesh.children[0].geometry = new WireframeGeometry(geometry);
   mesh.children[1].geometry = geometry;
-
-  // these do not update nicely together if shared
-
 }
 //#region 各形状gui配置
 const guis = {
@@ -689,86 +674,98 @@ const guis = {
 //#endregion
 
 //设置某个geometry的gui配置
-function chooseFromHash(mesh, GeometryName) {
+function chooseGeometry(mesh, GeometryName) {
   const selectedGeometry = GeometryName || 'TorusGeometry';
   if (guis[selectedGeometry] !== undefined) {
     guis[selectedGeometry](mesh);
   }
 }
-//初次渲染某个场景
-export const renderGeometry = (ele, GeometryName) => {
-  gui = new GUI();
-  scene.clear()
-  const eleOptions = ele.getBoundingClientRect()
-  // heart shape
-  const camera = new PerspectiveCamera(75, eleOptions.width / eleOptions.height, 0.1, 50);
-  camera.position.z = 30;
-
-  const renderer = new WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(eleOptions.width, eleOptions.height);
-  ele.append(renderer.domElement)
 
 
-  const orbit = new OrbitControls(camera, renderer.domElement);
-  orbit.enableZoom = false;
+export class GeometryDemo {
+  container = null//容器
+  containerOptions = null//容器参数值（长宽什么的
+  camera = null//相机
+  renderer = null//渲染器
+  scene = null//场景
+  // scene.background = new Color(0x444444);
+  group = new Group();
+  geometry = new BufferGeometry();
+  constructor(ele, GeometryName) {
+    for (let folder in gui.__folders) {
+      gui.removeFolder(gui.__folders[folder])
+    }
+    this.scene = new Scene()
+    this.container = ele
+    //将gui放到当前容器下
+    ele.appendChild(gui.domElement)
+    const eleOptions = ele.getBoundingClientRect()
+    this.containerOptions = eleOptions
+    // 相机
+    this.camera = new PerspectiveCamera(75, eleOptions.width / eleOptions.height, 0.1, 50);
+    this.camera.position.z = 30;
+    //渲染器
+    this.renderer = new WebGLRenderer({ antialias: true });
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setSize(eleOptions.width, eleOptions.height);
+    ele.append(this.renderer.domElement)
+    const orbit = new OrbitControls(this.camera, this.renderer.domElement);
+    orbit.enableZoom = false;//关闭阻尼..默认就是关闭的
+    //点光源
+    this.useLight()
+    const render = () => {
+      requestAnimationFrame(render);
+      this.group.rotation.x += 0.005;
+      this.group.rotation.y += 0.005;
+      this.renderer.render(this.scene, this.camera);
+    }
+    window.addEventListener('resize', function () {
+      if (camera) {
+        camera.aspect = eleOptions.width / eleOptions.height;
+        camera.updateProjectionMatrix();
+      }
+      this.renderer.setSize(eleOptions.width, eleOptions.height);
 
-  const lights = [];
-  lights[0] = new PointLight(0xffffff, 1, 0);
-  lights[1] = new PointLight(0xffffff, 1, 0);
-  lights[2] = new PointLight(0xffffff, 1, 0);
-
-  lights[0].position.set(0, 200, 0);
-  lights[1].position.set(100, 200, 100);
-  lights[2].position.set(- 100, - 200, - 100);
-
-  scene.add(lights[0]);
-  scene.add(lights[1]);
-  scene.add(lights[2]);
-
-
-  function render() {
-
-    requestAnimationFrame(render);
-
-    group.rotation.x += 0.005;
-    group.rotation.y += 0.005;
-
-    renderer.render(scene, camera);
-
+    }, false);
+    //材质
+    this.useMaterial()
+    chooseGeometry(this.group, GeometryName);
+    this.scene.add(this.group);
+    render();
   }
-  chooseFromHash(group, GeometryName);
-  scene.add(group);
-  render();
-}
+  useLight = () => {
+    const lights = [];
+    lights[0] = new PointLight(0xffffff, 1, 0);
+    lights[1] = new PointLight(0xffffff, 1, 0);
+    lights[2] = new PointLight(0xffffff, 1, 0);
 
+    lights[0].position.set(0, 200, 0);
+    lights[1].position.set(100, 200, 100);
+    lights[2].position.set(- 100, - 200, - 100);
 
-window.addEventListener('resize', function () {
-  if (camera) {
-    camera.aspect = eleOptions.width / eleOptions.height;
-    camera.updateProjectionMatrix();
+    this.scene.add(lights[0]);
+    this.scene.add(lights[1]);
+    this.scene.add(lights[2]);
   }
-  renderer.setSize(eleOptions.width, eleOptions.height);
-
-}, false);
-//渲染对应geometry
-export const reRenderGeometry = (GeometryName) => {
-  group.clear()
-  const geometry = new BufferGeometry();
-  geometry.setAttribute('position', new Float32BufferAttribute([], 3));
-  const lineMaterial = new LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
-  const meshMaterial = new MeshPhongMaterial({ color: 0x156289, emissive: 0x072534, side: DoubleSide, flatShading: true });
-  group.add(new LineSegments(geometry, lineMaterial));
-  group.add(new Mesh(geometry, meshMaterial));
-  for (let folder in gui.__folders) {
-    gui.removeFolder(gui.__folders[folder])
+  useMaterial = () => {
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', new Float32BufferAttribute([], 3));
+    const lineMaterial = new LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
+    const meshMaterial = new MeshPhongMaterial({ color: 0x156289, emissive: 0x072534, side: DoubleSide, flatShading: true });
+    this.group.add(new LineSegments(geometry, lineMaterial));
+    this.group.add(new Mesh(geometry, meshMaterial));
   }
-  chooseFromHash(group, GeometryName);
-}
-
-
-export const removeGui = () => {
-  if (gui) {
-    gui.destroy()
+  loadGeometry = (geometry) => {
+    this.group.clear()
+    this.useMaterial()
+    for (let folder in gui.__folders) {
+      gui.removeFolder(gui.__folders[folder])
+    }
+    chooseGeometry(this.group, geometry);
+  }
+  removeGui = () => {
+    if (gui) {
+      gui.domElement.parentElement.removeChild(gui.domElement)
+    }
   }
 }

@@ -1,27 +1,39 @@
 <template>
-  <div ref="demoGeometry" style="height:100%;width:100%"></div>
+  <div ref="demoGeometry" class="geometry-demo"></div>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, onBeforeUnmount } from "vue"
-import { renderGeometry, reRenderGeometry, removeGui } from "./index"
+import { ref, onMounted, nextTick, onBeforeUnmount } from "vue";
+import { GeometryDemo } from "./index";
 const props = defineProps({
   geometry: {
     type: String,
-  }
-})
-const demoGeometry = ref()
+  },
+});
+const demoGeometry = ref();
+let instance = null;
 onMounted(() => {
-  renderGeometry(demoGeometry.value, props.geometry)
-})
+  instance = new GeometryDemo(demoGeometry.value, props.geometry);
+});
 const setGeometry = async (geometry) => {
-  await nextTick()
-  reRenderGeometry(geometry)
-}
-defineExpose({ setGeometry })
+  await nextTick();
+  instance.loadGeometry(geometry);
+};
+defineExpose({ setGeometry });
 onBeforeUnmount(() => {
-  removeGui()
-})
+  instance.removeGui();
+});
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.geometry-demo {
+  height: 100%;
+  width: 100%;
+  position: relative;
+
+  :deep(.dg.main.a) {
+    position: absolute;
+    right: 0;
+  }
+}
+</style>
