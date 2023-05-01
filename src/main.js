@@ -3,7 +3,7 @@ import "normalize.css"
 import './style.css'
 import App from './App.vue'
 import router from './router'
-
+import 'element-plus/theme-chalk/dark/css-vars.css'
 
 //饿了么plus图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'

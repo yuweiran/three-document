@@ -43,7 +43,7 @@ import { GUI } from "dat.gui";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 
-const gui = new GUI();
+let gui = null
 const scene = new Scene();
 scene.background = new Color(0x444444);
 const twoPi = Math.PI * 2;
@@ -102,6 +102,7 @@ function updateGroupGeometry(mesh, geometry) {
   // these do not update nicely together if shared
 
 }
+//#region 各形状gui配置
 const guis = {
 
   BoxGeometry: function (mesh) {
@@ -685,18 +686,18 @@ const guis = {
   }
 
 };
+//#endregion
 
+//设置某个geometry的gui配置
 function chooseFromHash(mesh, GeometryName) {
-
   const selectedGeometry = GeometryName || 'TorusGeometry';
-
   if (guis[selectedGeometry] !== undefined) {
-
     guis[selectedGeometry](mesh);
-
   }
 }
+//初次渲染某个场景
 export const renderGeometry = (ele, GeometryName) => {
+  gui = new GUI();
   scene.clear()
   const eleOptions = ele.getBoundingClientRect()
   // heart shape
@@ -743,14 +744,14 @@ export const renderGeometry = (ele, GeometryName) => {
 
 
 window.addEventListener('resize', function () {
-
-  camera.aspect = eleOptions.width / eleOptions.height;
-  camera.updateProjectionMatrix();
-
+  if (camera) {
+    camera.aspect = eleOptions.width / eleOptions.height;
+    camera.updateProjectionMatrix();
+  }
   renderer.setSize(eleOptions.width, eleOptions.height);
 
 }, false);
-
+//渲染对应geometry
 export const reRenderGeometry = (GeometryName) => {
   group.clear()
   const geometry = new BufferGeometry();
@@ -763,4 +764,11 @@ export const reRenderGeometry = (GeometryName) => {
     gui.removeFolder(gui.__folders[folder])
   }
   chooseFromHash(group, GeometryName);
+}
+
+
+export const removeGui = () => {
+  if (gui) {
+    gui.destroy()
+  }
 }

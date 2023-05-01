@@ -31,6 +31,7 @@ const sections = ref([
   // { name: "Renderers", desciption: "渲染器" },
   // { name: "Textures", desciption: "纹理" },
   { name: "ClassUse", desciption: "使用Class" },
+  { name: "ImportModel", desciption: "模型导入" },
 ]);
 
 const handleToSection = (sectionName) => {

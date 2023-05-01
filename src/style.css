@@ -8,3 +8,11 @@
   width: 100vw;
   margin: 0 auto;
 }
+
+/* div[color-mode="light"] {
+  background-color: #fff;
+}
+
+div[color-mode="night"] {
+  background-color: #000;
+} */

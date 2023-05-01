@@ -3,13 +3,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue"
+import { ref, onMounted, onBeforeUnmount } from "vue"
 import Experience from "./class/Experience"
 
 const threeUseClass = ref()
-
+let threeInstance = ref()
 onMounted(() => {
-  new Experience(threeUseClass.value)
+  threeInstance.value = new Experience(threeUseClass.value)
+})
+onBeforeUnmount(() => {
+  console.log('销毁')
+  threeInstance.value.destroy()
 })
 </script>
 

@@ -3,8 +3,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from "vue"
-import { renderGeometry, reRenderGeometry } from "./index"
+import { ref, onMounted, nextTick, onBeforeUnmount } from "vue"
+import { renderGeometry, reRenderGeometry, removeGui } from "./index"
 const props = defineProps({
   geometry: {
     type: String,
@@ -19,7 +19,9 @@ const setGeometry = async (geometry) => {
   reRenderGeometry(geometry)
 }
 defineExpose({ setGeometry })
-
+onBeforeUnmount(() => {
+  removeGui()
+})
 </script>
 
 <style scoped lang="scss"></style>

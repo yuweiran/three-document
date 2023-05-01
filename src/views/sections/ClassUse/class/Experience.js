@@ -23,5 +23,15 @@ export default class Experience {
     // this.light = new InitLight()
 
   }
+  destroy = () => {
+    if (this.scene.children.length > 0) {
+      for (let item of this.scene.children) {
+        this.scene.remove(item)
+      }
+    }
+    this.renderer.instance.dispose()
+    this.scene.remove(this.scene)
+    instance = null
+  }
 }
 

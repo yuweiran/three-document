@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-full overflow-auto">
-    <el-menu class="h-full overflow-auto" @select="handleSelectGeometry">
+    <el-menu class="h-full overflow-auto w-72" @select="handleSelectGeometry">
       <el-menu-item v-for="geometry in sections" :index="geometry">{{ geometry }}</el-menu-item>
     </el-menu>
     <div class="flex-1 overflow-auto">
@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import DemoGeometry from "@/components/geometries/index.vue"
 const seletedGeometry = ref('BoxGeometry')
 const demoGeometry = ref()
@@ -24,6 +24,9 @@ const handleSelectGeometry = (geometry) => {
   seletedGeometry.value = geometry
   demoGeometry.value.setGeometry(geometry)
 }
+onMounted(() => {
+
+})
 </script>
 
 <style lang="scss" scoped></style>

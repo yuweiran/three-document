@@ -16,6 +16,10 @@ const routes = [
       {
         path: 'ClassUse',
         component: () => import("@/views/sections/ClassUse/index.vue")
+      },
+      {
+        path: 'ImportModel',
+        component: () => import("@/views/sections/ImportModel/index.vue")
       }
     ]
   }
