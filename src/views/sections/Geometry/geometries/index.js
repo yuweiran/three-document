@@ -719,10 +719,10 @@ export class GeometryDemo {
       this.group.rotation.y += 0.005;
       this.renderer.render(this.scene, this.camera);
     }
-    window.addEventListener('resize', function () {
-      if (camera) {
-        camera.aspect = eleOptions.width / eleOptions.height;
-        camera.updateProjectionMatrix();
+    window.addEventListener('resize', () => {
+      if (this.camera) {
+        this.aspect = eleOptions.width / eleOptions.height;
+        this.updateProjectionMatrix();
       }
       this.renderer.setSize(eleOptions.width, eleOptions.height);
 

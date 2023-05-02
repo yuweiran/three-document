@@ -20,6 +20,10 @@ const routes = [
       {
         path: 'ImportModel',
         component: () => import("@/views/sections/ImportModel/index.vue")
+      },
+      {
+        path: 'Shader',
+        component: () => import("@/views/sections/Shaders/index.vue")
       }
     ]
   }
