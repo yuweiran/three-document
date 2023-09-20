@@ -16,8 +16,8 @@ import SceneFrame from "@/components/scene/SceneFrame.vue"
 import { GLTFLoader, } from "three/examples/jsm/loaders/GLTFLoader"
 import { PlaneBufferGeometry, Mesh, MeshStandardMaterial, Clock, RawShaderMaterial, BufferAttribute } from "three"
 //后面接?raw  通过字符串形式引入
-import fragmentShader from "./shaderjs/fragment.glsl?raw"
-import vertexShader from "./shaderjs/vertex.glsl?raw"
+import fragmentShader from "./shaderjs/fragment.frag?raw"
+import vertexShader from "./shaderjs/vertex.vert?raw"
 
 const sceneContainer = ref()
 let scene = ref()
@@ -25,7 +25,7 @@ let scene = ref()
 
 const handleSelectShader = (index) => {
   if (index === 'shader1') {
-
+    
   } else if (index === 'shader2') {
 
   }

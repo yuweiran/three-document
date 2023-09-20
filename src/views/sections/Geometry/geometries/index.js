@@ -46,11 +46,8 @@ const twoPi = Math.PI * 2;
 class CustomSinCurve extends Curve {
 
   constructor(scale = 1) {
-
     super();
-
     this.scale = scale;
-
   }
 
   getPoint(t, optionalTarget = new Vector3()) {
